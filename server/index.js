@@ -1,17 +1,27 @@
 import express from 'express';
 import https from 'https';
 import fs from 'fs';
+import path from 'path';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import apkRoutes from './routes/apkRoutes.js';
 
+// Get the directory name correctly in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Initialize express
+const app = express();
+
+// Load environment variables
 dotenv.config();
 
 // Connect to MongoDB
 connectDB();
 
-const app = express();
+// Define port
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -25,17 +35,23 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-// For HTTP
-app.listen(PORT, () => {
-  console.log(`HTTP Server running on port ${PORT}`);
-});
-
-// For HTTPS - uncomment once you have certificates
-// const privateKey = fs.readFileSync('/path/to/privkey.pem', 'utf8');
-// const certificate = fs.readFileSync('/path/to/cert.pem', 'utf8');
-// const credentials = { key: privateKey, cert: certificate };
-// 
-// const httpsServer = https.createServer(credentials, app);
-// httpsServer.listen(443, () => {
-//   console.log('HTTPS Server running on port 443');
+// // HTTP server for development
+// app.listen(PORT, () => {
+//   console.log(`HTTP Server running on port ${PORT}`);
 // });
+
+// Read SSL certificates
+try {
+  const sslOptions = {
+    key: fs.readFileSync(path.join(__dirname, 'ssl', 'server.key')),
+    cert: fs.readFileSync(path.join(__dirname, 'ssl', 'server.cert')),
+  };
+
+  // Create HTTPS server
+  const HTTPS_PORT = 6060;
+  https.createServer(sslOptions, app).listen(HTTPS_PORT, () => {
+    console.log(`HTTPS Server running on port ${HTTPS_PORT}`);
+  });
+} catch (error) {
+  console.log('SSL certificates not found, HTTPS server not started:', error.message);
+}
