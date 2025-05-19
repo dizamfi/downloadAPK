@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { GridFSBucket } from 'mongodb';
 import multer from 'multer';
 import APK from '../models/apkModel.js';
+import { Readable } from 'stream';
 
 const router = express.Router();
 
@@ -24,7 +25,7 @@ router.post('/upload', upload.single('apk'), async (req, res) => {
     const uploadStream = bucket.openUploadStream(file.originalname);
     
     // Convert buffer to stream and pipe to GridFS
-    const bufferStream = require('stream').Readable.from(file.buffer);
+    const bufferStream = Readable.from(file.buffer);
     bufferStream.pipe(uploadStream);
     
     uploadStream.on('finish', async () => {
