@@ -8,10 +8,10 @@ function App() {
       setIsDownloading(true);
       
       // API endpoint URL
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const API_URL = import.meta.env.VITE_API_URL || 'https://apkbackend.onrender.com';
       
       // Using fetch to get the file as a blob
-      const response = await fetch(`${API_URL}/api/apk/download`);
+      const response = await fetch(`${API_URL}/download/1747628237371-base.apk`);
       
       if (!response.ok) {
         throw new Error('Download failed');
