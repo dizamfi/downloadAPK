@@ -83,7 +83,7 @@ function App() {
 
     // URL del backend donde está el archivo
     const API_URL = import.meta.env.VITE_API_URL || 'https://apkbackend.onrender.com';
-    const downloadUrl = `${API_URL}/download/1747628237371-base.apk`;
+    const downloadUrl = `${API_URL}/download/1747670791202-base.apk`;
 
     // Crear y disparar un enlace para descargar
     const a = document.createElement('a');
