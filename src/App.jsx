@@ -8,7 +8,7 @@ function App() {
       setIsDownloading(true);
       
       // API endpoint URL
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const API_URL = import.meta.env.VITE_API_URL || 'http://201.217.78.155:6060';
       
       // Using fetch to get the file as a blob
       const response = await fetch(`${API_URL}/api/apk/download`);
